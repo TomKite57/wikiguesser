@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 import os
 from constants import *
 
-
 def file_exists(fname):
     try:
         file = open(fname, 'r')
@@ -22,6 +21,7 @@ def get_candidate_tags(url):
 def scrape_level_3():
     url = "https://en.wikipedia.org/wiki/Wikipedia:Vital_articles"
     article_titles = []
+    URLs = []
     STARTED = False
 
     for elem in get_candidate_tags(url):
@@ -34,21 +34,24 @@ def scrape_level_3():
 
         if (STARTED and title != "" and len(title) > 1 and elem.class_!="image" and not title.startswith("Level")):
             article_titles.append(title)
+            URLs.append("https://en.wikipedia.org" + elem.attrs["href"])
 
-    return article_titles
+    return article_titles, URLs
 
-def write_file(fname, contents):
+def write_file(fname, titles, urls):
     with open(fname, 'w+') as file:
-        [file.write(f"{l}\n") for l in contents]
+        [file.write(f"{t}<=>{u}\n") for t, u in zip(titles, urls)]
 
 def run_scrape(*, force=False):
     if not os.path.exists(SCRAPE_FNAME):
-        write_file(SCRAPE_FNAME, scrape_level_3())
+        articles, urls = scrape_level_3()
+        write_file(SCRAPE_FNAME, articles, urls)
         return
 
     if force:
         os.remove(SCRAPE_FNAME)
-        write_file(SCRAPE_FNAME, scrape_level_3())
+        articles, urls = scrape_level_3()
+        write_file(SCRAPE_FNAME, articles, urls)
 
 
 if __name__ == "__main__":

@@ -30,6 +30,7 @@ def filter_common_words(tokens):
 def filter_punctuation(tokens):
     punctuation = set(string.punctuation)
     tokens = [token for token in tokens if token not in punctuation]
+    tokens = [token for token in tokens if "\\" not in token]
     return tokens
 
 def filter_custom(tokens, *args):
@@ -50,6 +51,10 @@ def filter_title_words(tokens, title):
         tokens = [token for token in tokens if string_distance(token, t.lower())>2]
     return tokens
 
+def filter_initials(tokens):
+    tokens = [token for token in tokens if not (len(token)==2 and token[1]=='.')]
+    return tokens
+
 def apply_all_filters(tokens, title):
     tokens = filter_stopwords_words(tokens)
     tokens = filter_common_words(tokens)
@@ -58,6 +63,7 @@ def apply_all_filters(tokens, title):
     tokens = filter_length(tokens)
     tokens = filter_custom(tokens, *CUSTOM_TOKENS)
     tokens = filter_title_words(tokens, title)
+    tokens = filter_initials(tokens)
     return tokens
 
 #==============================================================================#
