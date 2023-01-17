@@ -13,6 +13,7 @@ from scraper import run_scrape
 from constants import *
 from word_filter import all_filters_and_frequency
 from utility import clear_screen
+import unicodedata
 
 #==============================================================================#
 def load_article_titles(fname):
@@ -111,11 +112,14 @@ def mass_scrape():
 
     all_titles, _ = load_article_titles(SCRAPE_FNAME)
     for title in tqdm(all_titles):
-        if title in current_scrape and not custom_token_in_hints(current_scrape[title]):
+        ascii_title = unicodedata.normalize('NFKD', title).encode('ascii', 'ignore').decode('UTF-8')
+
+        if ascii_title in current_scrape and not custom_token_in_hints(current_scrape[ascii_title]):
             continue
 
         hints = all_filters_and_frequency(get_wikipedia_page(title), title)[::-1]
-        current_scrape[title] = hints
+
+        current_scrape[ascii_title] = hints
 
         with open(MASS_SCRAPE_FNAME, "w") as outfile:
             outfile.write(json.dumps(current_scrape, indent=4))

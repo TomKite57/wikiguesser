@@ -27,7 +27,8 @@ CUSTOM_TOKENS = ["\'\'", "``", "retrieved", "archived", "isbn", "doi", "oclc",
                  "2020-08-25", "du", "des", "kg", "ar", "2/3", "978-0-333-78676-5", "ss",
                  "uss", "12.00", "ics", "type", "mya", "vol", "jstor", "st.", "nm",
                  "te", "li", "iso", "da", "lccn", "cm", "la", "pmc", "became", "known",
-                 "among", "term", "main", "acording", "however"]
+                 "among", "term", "main", "acording", "however", "per", "include", "often",
+                 "including", "crop", "ft/s", "m3/s", "i+1", "t=", "a="]
 
 
 WELCOME_ASCII = \
